@@ -1,4 +1,4 @@
-![http://i.imgur.com/RiMmYgU.png](The destructor is coming!)
+![The destructor is coming!](http://i.imgur.com/RiMmYgU.png])
 
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
