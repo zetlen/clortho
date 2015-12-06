@@ -1,7 +1,7 @@
 {
   "name": "clortho",
   "version": "1.0.2",
-  "description": "Many Shuvs and Zuuls knew what it was to be roasted in the depths of the Slor that day, I can tell you!",
+  "description": "friendly, OS-appropriate password handling for node scripts",
   "main": "lib/index.js",
   "scripts": {
     "babel": "babel src -d lib",

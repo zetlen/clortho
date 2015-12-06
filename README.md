@@ -2,7 +2,7 @@
 
 [![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg?style=flat-square)](https://github.com/Flet/semistandard)
 
-:key: :ghost: **Clortho** :ghost: :key: is a library for asking for service passwords from node scripts. It is [not](https://github.com/pivotal/vinz-clortho) the [first](https://github.com/mozilla/vinz-clortho) library to be named after Louis Tully, but I chose a new form for him: that of a giant Slor!
+**Clortho** is a library for asking for service passwords from node scripts. It is [not](https://github.com/pivotal/vinz-clortho) the [first](https://github.com/mozilla/vinz-clortho) library to be named after Louis Tully, but I chose a new form for him: that of a giant Slor!
 
 #### Use Clortho if:
  - You're using Node as a scripting language with user interaction, such as a Yeoman generator, or a Grunt or Gulp plugin.
