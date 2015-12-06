@@ -70,7 +70,7 @@ tape('no message ok if prompt is false', assert => {
     username: account.username
   })
   .then(
-    cred => assert.deepEqual(cred, account, 'credential wrong ' + cred),
+    cred => assert.deepEqual(cred, account, 'credential correct'),
     e => assert.err(e)
   );
 });
