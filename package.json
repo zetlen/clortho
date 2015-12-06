@@ -1,6 +1,6 @@
 {
   "name": "clortho",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Many Shuvs and Zuuls knew what it was to be roasted in the depths of the Slor that day, I can tell you!",
   "main": "lib/index.js",
   "scripts": {
