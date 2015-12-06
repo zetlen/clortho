@@ -1,6 +1,6 @@
 {
   "name": "clortho",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "friendly, OS-appropriate password handling for node scripts",
   "main": "lib/index.js",
   "scripts": {
