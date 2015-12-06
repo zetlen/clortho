@@ -1,15 +1,18 @@
 'use strict';
 const inquirer = require('inquirer');
+const ErrorManager = require('./error-manager');
 
-module.exports = (username, message) =>
+module.exports = (service, username, message) =>
   new Promise((y, n) => {
     process.stdout.write('\u0007\n'); // ding!
-    console.log(message);
+    console.log(
+      message || `Please enter your credentials for ${service}.`
+    );
     let prompts = [
       {
         type: 'input',
         name: 'username',
-        message: 'Username',
+        message: `Username for ${service}`,
         validate: str => !!str,
         when: () => !username,
         default: username

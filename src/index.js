@@ -14,67 +14,68 @@ try {
   hasPowershell = false;
 }
 
-let validateOpts = opts => {
-  if (!opts) return 'No configuration object supplied.';
-  if (!opts.service) return 'No service name supplied. Please supply a service name for this credential. It can be arbitrary.';
-  if (opts.prompt !== false && !opts.message) {
-    return 'No prompt message supplied. What is this credential for?';
-  }
-};
-
-module.exports = opts =>
-  new Promise((y, n) => {
-    let invalid = validateOpts(opts);
-    if (invalid) return n(ErrorManager.create('INVALID_OPTS', invalid));
-
-    if (opts.keychain === false) {
-      // skip right to prompts then
-      return y(null);
-    } else {
-      return keychain.get(opts.service, opts.username)
-      .catch(e => {
-        if (
-          ErrorManager.getCode(e) === 'GET_FAILURE' &&
-          opts.prompt !== false
-        ) {
-          // that's ok, we'll prompt for it!
-          return null;
-        }
-        // otherwise pass it along
-        throw e;
-      }).then(y, n);
-    }
-  })
-  .then(password => {
-    if (password) {
-      return {
-        username: opts.username,
-        password: password
-      };
-    }
-    if (opts.forceCli) {
-      return cliPrompt(opts.username, opts.message);
-    } else if (platform === 'darwin' && opts.username) {
-      return osaDialog(opts.username, opts.message);
-    } else if (platform.indexOf('win') === 0 && hasPowershell) {
-      return psDialog(opts.username, opts.message);
-    } else if (opts.cli !== false) {
-      return cliPrompt(opts.username, opts.message);
-    } else {
+let clortho = (opts = {service, username, message, cli, keychain, refresh}) =>
+  Promise.resolve().then(() => {
+    if (!opts) {
       throw ErrorManager.create(
-        'NO_PROMPT_STRATEGY',
-        'No acceptable prompting system found.'
+        'INVALID_OPTS',
+        'No configuration object supplied.'
       );
     }
-  })
-  .then(credential => {
-    if (opts.keychain === false) {
-      return credential;
-    } else {
-      return keychain.set(
-        opts.service,
-        credential.username,
-        credential.password
-      ).then(() => credential);
+    let vinz = clortho.forService(service);
+    if (keychain === false) {
+      return vinz.prompt(username, message, cli);
     }
+    if (prompt === false) {
+      return vinz.getFromKeychain(username);
+    }
+    if (refresh || !username) {
+      return vinz.prompt(username, message, cli)
+      .then(vinz.trySaveToKeychain);
+    }
+    return vinz.getFromKeychain(username)
+    .catch(() => null)
+    .then(cred => cred || vinz.prompt(username, message, cli))
+    .then(vinz.trySaveToKeychain);
   });
+
+clortho.forService = service => {
+  if (!service) {
+    throw ErrorManager.create(
+      'INVALID_OPTS',
+      'No service name supplied. Please supply a service name for this credential. It can be arbitrary.'
+    );
+  }
+  return {
+    getFromKeychain(username) {
+      return keychain.get(service, username);
+    },
+    prompt(username, message, cli) {
+      if (cli === true) {
+        return cliPrompt(service, username, message);
+      } else if (platform === 'darwin' && username) {
+        return osaDialog(service, username, message);
+      } else if (platform.indexOf('win') === 0 && hasPowershell) {
+        return psDialog(service, username, message);
+      } else if (cli === false) {
+        return cliPrompt(service, username, message);
+      } else {
+        return Promise.reject(
+          ErrorManager.create(
+            'NO_PROMPT_STRATEGY',
+            'No acceptable prompting system found.'
+          )
+        );
+      }
+    },
+    saveToKeychain(username, password) {
+      return keychain.set(service, username, password);
+    },
+    trySaveToKeychain(credential) {
+      return keychain.set(service, credential.username, credential.password)
+      .catch(() => credential);
+    }
+  };
+};
+
+module.exports = clortho;

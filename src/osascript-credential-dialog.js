@@ -1,8 +1,9 @@
 'use strict';
 const childProcess = require('child_process');
-const osa = (username, message) => new Promise((y, n) =>
+const osa = (service, username, message) => new Promise((y, n) => {
+  message = message || `Please enter your password for ${username} to login to ${service}.`;
   childProcess.exec(
-    `osascript -e 'tell app "System Events" to return display dialog "${message}" with title "Password for ${username}" with icon caution default answer "" buttons { "Cancel", "OK" } default button 2 with hidden answer'`,
+    `osascript -e 'tell app "System Events" to return display dialog "${message}" with title "Password for ${service}" with icon caution default answer "" buttons { "Cancel", "OK" } default button 2 with hidden answer'`,
     { stdio: 'ignore' },
     (e, stdout, stderr) => {
       if (e) return n(e);
@@ -10,7 +11,7 @@ const osa = (username, message) => new Promise((y, n) =>
       y(stdout.trim());
     }
   )
-);
+});
 let requirePassword = (username, message, repeated) =>
   osa(username, message).then(r => {
     let m = r.match(/text returned:(.*)/);
