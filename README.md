@@ -106,4 +106,10 @@ Both arguments are required. Saves the password securely to the system keychain.
 ##### `trySaveToKeychain(credetial)`
 Instead of separate `username` and `password` arguments like `saveToKeychain`, this method takes a credential object with `username` and `password` properties, and attempts to save it to the system keychain. This method **always resolves with the credential again**. It is meant as a pass-through method that should not notify if it fails.
 
+### Installation
+
+NPM:
+
+    npm install clortho
+
 [1]: https://github.com/atom/node-keytar "node-keytar"
