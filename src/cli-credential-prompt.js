@@ -27,5 +27,5 @@ module.exports = (username, message) =>
         a.username = a.username || username;
         y(a);
       });
-    } catch(e) { n(e) }
+    } catch (e) { n(e); }
   });

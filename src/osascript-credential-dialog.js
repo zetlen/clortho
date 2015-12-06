@@ -7,7 +7,7 @@ const osa = (username, message) => new Promise((y, n) =>
     (e, stdout, stderr) => {
       if (e) return n(e);
       if (stderr) return n(new Error(stderr));
-      y(stdout.trim())
+      y(stdout.trim());
     }
   )
 );
@@ -15,7 +15,7 @@ let requirePassword = (username, message, repeated) =>
   osa(username, message).then(r => {
     let m = r.match(/text returned:(.*)/);
     if (!m || !m[1]) {
-      return requirePassword(username, !repeated ? "A password is required.\n\n" + message : message, true);
+      return requirePassword(username, !repeated ? 'A password is required.\n\n' + message : message, true);
     }
     return m[1];
   });
