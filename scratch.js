@@ -1,0 +1,1 @@
+require('./').forService('Gozer').prompt('vinz@clortho.horse', 'I am Vinz, Vinz Clortho, Keymaster of Gozer. Volguus Zildrohar, Lord of the Sebouillia. Are you the Gatekeeper?', true).then(console.log, console.error)

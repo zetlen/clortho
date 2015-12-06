@@ -1,6 +1,5 @@
 'use strict';
 const inquirer = require('inquirer');
-const ErrorManager = require('./error-manager');
 
 module.exports = (service, username, message) =>
   new Promise((y, n) => {

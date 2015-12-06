@@ -2,11 +2,23 @@
   "name": "clortho",
   "version": "1.0.0",
   "description": "Many Shuvs and Zuuls knew what it was to be roasted in the depths of the Slor that day, I can tell you!",
-  "main": "src/index.js",
+  "main": "lib/index.js",
   "scripts": {
+    "babel": "babel src -d lib",
     "lint": "semistandard **/*.js",
     "tape": "tape ./test/**/*.js",
-    "test": "npm run lint && npm run tape"
+    "test": "npm run lint && npm run babel && npm run tape",
+    "preversion": "npm run test",
+    "version": "git add -A ."
+  },
+  "semistandard": {
+    "parser": "babel-eslint",
+    "ignore": "lib/**"
+  },
+  "babel": {
+    "presets": [
+      "es2015"
+    ]
   },
   "repository": {
     "type": "git",
@@ -28,7 +40,10 @@
     "which": "^1.2.0"
   },
   "devDependencies": {
-    "semistandard": "^7.0.4",
+    "babel-cli": "^6.3.15",
+    "babel-eslint": "^4.1.6",
+    "babel-preset-es2015": "^6.3.13",
+    "semistandard": "*",
     "tape": "^4.2.2"
   }
 }

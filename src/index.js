@@ -14,7 +14,7 @@ try {
   hasPowershell = false;
 }
 
-let clortho = (opts = {service, username, message, cli, keychain, refresh}) =>
+let clortho = (opts) =>
   Promise.resolve().then(() => {
     if (!opts) {
       throw ErrorManager.create(
@@ -22,21 +22,15 @@ let clortho = (opts = {service, username, message, cli, keychain, refresh}) =>
         'No configuration object supplied.'
       );
     }
+    let {service, username, message, cli, refresh} = opts;
     let vinz = clortho.forService(service);
-    if (keychain === false) {
-      return vinz.prompt(username, message, cli);
-    }
-    if (prompt === false) {
-      return vinz.getFromKeychain(username);
-    }
     if (refresh || !username) {
-      return vinz.prompt(username, message, cli)
-      .then(vinz.trySaveToKeychain);
+      return vinz.prompt(username, message, cli).then(vinz.trySaveToKeychain);
     }
     return vinz.getFromKeychain(username)
-    .catch(() => null)
-    .then(cred => cred || vinz.prompt(username, message, cli))
-    .then(vinz.trySaveToKeychain);
+    .catch(() =>
+      vinz.prompt(username, message, cli).then(vinz.trySaveToKeychain)
+    );
   });
 
 clortho.forService = service => {
@@ -46,18 +40,27 @@ clortho.forService = service => {
       'No service name supplied. Please supply a service name for this credential. It can be arbitrary.'
     );
   }
+  if (typeof service !== 'string') {
+    throw ErrorManager.create(
+      'INVALID_OPTS',
+      'Service name must be a string.'
+    );
+  }
   return {
-    getFromKeychain(username) {
-      return keychain.get(service, username);
+    getFromKeychain (username) {
+      return keychain.get(service, username)
+      .then(
+        password => ({ username, password })
+      );
     },
-    prompt(username, message, cli) {
+    prompt (username, message, cli) {
       if (cli === true) {
         return cliPrompt(service, username, message);
       } else if (platform === 'darwin' && username) {
         return osaDialog(service, username, message);
       } else if (platform.indexOf('win') === 0 && hasPowershell) {
         return psDialog(service, username, message);
-      } else if (cli === false) {
+      } else if (cli !== false) {
         return cliPrompt(service, username, message);
       } else {
         return Promise.reject(
@@ -68,12 +71,15 @@ clortho.forService = service => {
         );
       }
     },
-    saveToKeychain(username, password) {
+    saveToKeychain (username, password) {
       return keychain.set(service, username, password);
     },
-    trySaveToKeychain(credential) {
+    trySaveToKeychain (credential) {
       return keychain.set(service, credential.username, credential.password)
-      .catch(() => credential);
+      .then(
+        () => credential,
+        () => credential
+      );
     }
   };
 };

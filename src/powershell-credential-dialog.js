@@ -26,5 +26,4 @@ module.exports = (service, username, message) => {
       password: answers[1]
     };
   });
-
-});
+};
