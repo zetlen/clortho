@@ -1,19 +1,13 @@
 'use strict';
-const os = require('os');
-const which = require('which');
-const platform = process.env.TEST_PLAT || os.platform();
+const {
+  isOSX,
+  isWindows,
+  hasPowershell } = require('./os-features');
 const psDialog = require('./powershell-credential-dialog');
 const osaDialog = require('./osascript-credential-dialog');
 const cliPrompt = require('./cli-credential-prompt');
 const keychain = require('./keychain-access');
 const ErrorManager = require('./error-manager');
-let hasPowershell = (function () {
-  try {
-    return which.sync('powershell');
-  } catch (e) {
-    return false;
-  }
-}());
 
 let clortho = (opts) =>
   Promise.resolve().then(() => {
@@ -34,6 +28,12 @@ let clortho = (opts) =>
     );
   });
 
+let getOsPrompt = (username, message, cli) => {
+  if (isOSX && username) return osaDialog;
+  if (isWindows && hasPowershell) return psDialog;
+  if (cli !== false) return cliPrompt;
+};
+
 clortho.forService = service => {
   if (!service) {
     throw ErrorManager.create(
@@ -49,20 +49,17 @@ clortho.forService = service => {
   }
   return {
     getFromKeychain (username) {
-      return keychain.get(service, username)
-      .then(
-        password => ({ username, password })
-      );
+      return keychain.get(service, username);
     },
     prompt (username, message, cli) {
+      let osPrompt;
       if (cli === true) {
-        return cliPrompt(service, username, message);
-      } else if (platform === 'darwin' && username) {
-        return osaDialog(service, username, message);
-      } else if (platform.indexOf('win') === 0 && hasPowershell) {
-        return psDialog(service, username, message);
-      } else if (cli !== false) {
-        return cliPrompt(service, username, message);
+        osPrompt = cliPrompt;
+      } else {
+        osPrompt = getOsPrompt(username, message, cli);
+      }
+      if (osPrompt) {
+        return osPrompt(service, username, message);
       } else {
         return Promise.reject(
           ErrorManager.create(

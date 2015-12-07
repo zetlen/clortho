@@ -36,7 +36,8 @@
   "homepage": "https://github.com/zetlen/clortho#readme",
   "dependencies": {
     "inquirer": "^0.11.0",
-    "keytar": "^3.0.0",
+    "js-string-escape": "^1.0.0",
+    "keychain": "^1.0.0",
     "which": "^1.2.0"
   },
   "devDependencies": {

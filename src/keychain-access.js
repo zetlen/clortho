@@ -1,61 +1,13 @@
 'use strict';
-const keytar = require('keytar');
-const ErrorManager = require('./error-manager');
+const { isOSX, isWindows, hasPowershell } = require('./os-features');
+const OSXKeychainManager = require('./osx-keychain-manager');
+const PowershellKeychainManager = require('./powershell-keychain-manager');
+const InMemoryKeychainManager = require('./in-memory-keychain-manager');
 
-module.exports = {
-  get: (service, username) => new Promise((y, n) => {
-    let pw;
-    try {
-      pw = keytar.getPassword(service, username);
-    } catch (e) {
-      return n(
-        ErrorManager.create(
-          'KEYCHAIN_FAILURE',
-          e.message
-        )
-      );
-    }
-    if (pw) return y(pw);
-    return n(
-      ErrorManager.create(
-        'GET_FAILURE',
-        `No ${service} password found for ${username}.`
-      )
-    );
-  }),
-  set: (service, username, password) => new Promise((y, n) => {
-    let success;
-    try {
-      success = keytar.replacePassword(service, username, password);
-    } catch (e) {
-      return n(
-        ErrorManager.create(
-          'KEYCHAIN_FAILURE',
-          e.message
-        )
-      );
-    }
-    if (success) return y(success);
-    return n(
-      ErrorManager.create(
-        'SAVE_FAILURE',
-        `Could not save ${service} password for ${username} in keychain.`
-      )
-    );
-  }),
-  remove: (service, username) => new Promise((y, n) => {
-    let fail = () => n(
-        ErrorManager.create(
-          'DELETE_FAILURE',
-          `Could not delete ${service} password for ${username} in keychain.`
-        )
-      );
-    let success;
-    try {
-      success = keytar.deletePassword(service, username);
-    } catch (e) {
-      return fail();
-    }
-    return success ? y() : fail();
-  })
+const getOSKeychainManager = () => {
+  if (isOSX) return OSXKeychainManager;
+  if (isWindows && hasPowershell) return PowershellKeychainManager;
+  return InMemoryKeychainManager;
 };
+
+module.exports = getOSKeychainManager();
