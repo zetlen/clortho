@@ -81,6 +81,9 @@ clortho.forService = service => {
         () => credential,
         () => credential
       );
+    },
+    removeFromKeychain (username) {
+      return keychain.remove(service, username);
     }
   };
 };

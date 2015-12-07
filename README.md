@@ -105,8 +105,11 @@ Prompts the user with a system-appropriate dialog or prompt. The `username` stri
 ##### `saveToKeychain(username, password)`
 Both arguments are required. Saves the password securely to the system keychain. Resolves `true` if save was successful. Rejects if save failed for any reason.
 
-##### `trySaveToKeychain(credetial)`
+##### `trySaveToKeychain(credential)`
 Instead of separate `username` and `password` arguments like `saveToKeychain`, this method takes a credential object with `username` and `password` properties, and attempts to save it to the system keychain. This method **always resolves with the credential again**. It is meant as a pass-through method that should not notify if it fails.
+
+##### `removeFromKeychain(username)`
+Remove the password from the keychain for the service. Resolves `true` if delete was successful.
 
 ### Installation
 

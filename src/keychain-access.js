@@ -42,5 +42,20 @@ module.exports = {
         `Could not save ${service} password for ${username} in keychain.`
       )
     );
+  }),
+  remove: (service, username) => new Promise((y, n) => {
+    let fail = () => n(
+        ErrorManager.create(
+          'DELETE_FAILURE',
+          `Could not delete ${service} password for ${username} in keychain.`
+        )
+      );
+    let success;
+    try {
+      success = keytar.deletePassword(service, username);
+    } catch (e) {
+      return fail();
+    }
+    return success ? y() : fail();
   })
 };
