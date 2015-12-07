@@ -7,12 +7,13 @@ const osaDialog = require('./osascript-credential-dialog');
 const cliPrompt = require('./cli-credential-prompt');
 const keychain = require('./keychain-access');
 const ErrorManager = require('./error-manager');
-let hasPowershell;
-try {
-  hasPowershell = which.sync('powershell');
-} catch (e) {
-  hasPowershell = false;
-}
+let hasPowershell = (function () {
+  try {
+    return which.sync('powershell');
+  } catch (e) {
+    return false;
+  }
+}());
 
 let clortho = (opts) =>
   Promise.resolve().then(() => {
