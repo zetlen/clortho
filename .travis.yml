@@ -9,15 +9,14 @@ node_js:
 - '4.1'
 before_install:
   - if [ $TRAVIS_OS_NAME == "darwin" ]; then
-      # nvm is not yet supported on osx, manually install
-      git clone https://github.com/creationix/nvm.git /tmp/.nvm
-      source /tmp/.nvm/nvm.sh
-      nvm install $NODE_VERSION
-      nvm use $NODE_VERSION
+      git clone https://github.com/creationix/nvm.git /tmp/.nvm;
+      source /tmp/.nvm/nvm.sh;
+      nvm install $NODE_VERSION;
+      nvm use $NODE_VERSION;
     fi
   - if [ $TRAVIS_OS_NAME == "linux"  ]; then
-      sudo apt-get update -qq
-      sudo apt-get install -y gnome-keyring
+      sudo apt-get update -qq;
+      sudo apt-get install -y gnome-keyring;
     fi
 before_script:
 - npm install
