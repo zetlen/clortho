@@ -1,6 +1,5 @@
 language: node_js
 os:
-  - osx
   - linux
 node_js:
 - 'stable'
@@ -16,5 +15,13 @@ before_install:
       sudo apt-get update -qq;
       sudo apt-get install -y libglib2.0-dev libgnome-keyring-dev;
     fi
+addons:
+  apt:
+    sources:
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-4.8
+env:
+  CXX=g++-4.8
 before_script:
 - npm install
