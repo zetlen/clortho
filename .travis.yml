@@ -1,9 +1,11 @@
 language: node_js
 os:
+  - osx
   - linux
 node_js:
 - 'stable'
 before_install:
+  - echo $TRAVIS_OS_NAME;
   - if [ $TRAVIS_OS_NAME == "osx" ]; then
       git clone https://github.com/creationix/nvm.git /tmp/.nvm;
       source /tmp/.nvm/nvm.sh;
