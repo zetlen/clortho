@@ -33,7 +33,7 @@
 
 The above is the simplest usage; it should work for most cases, because it does some sane things.
 
-1. First, it checks your operating system's credential store or keychain for a password for the named `service` and `username`, using [node-keytar][1].
+1. First, it checks your operating system's credential store or keychain for a password for the named `service` and `username`, using the `security` utility on OSX, a PowerShell script on Windows, or a simple in-memory storage (that never writes to disk) if neither are available.
 
 2. If it finds a password available in the keychain, it skips prompting the user and resolves the promise with the credential.
 
