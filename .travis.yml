@@ -1,4 +1,10 @@
 language: node_js
+os:
+  - osx
+  -linux
+matrix:
+  allow_failures:
+    - os: linux
 node_js:
 - '4.1'
 before_script:
