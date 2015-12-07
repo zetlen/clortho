@@ -8,7 +8,7 @@ matrix:
 node_js:
 - '4.1'
 before_install:
-  - if [ $TRAVIS_OS_NAME == "darwin" ]; then
+  - if [ $TRAVIS_OS_NAME == "osx" ]; then
       git clone https://github.com/creationix/nvm.git /tmp/.nvm;
       source /tmp/.nvm/nvm.sh;
       nvm install 4.1;
