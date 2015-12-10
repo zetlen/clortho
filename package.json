@@ -46,5 +46,8 @@
     "babel-preset-es2015": "^6.3.13",
     "semistandard": "*",
     "tape": "^4.2.2"
+  },
+  "engines": {
+    "node": "^4.0.0"
   }
 }
