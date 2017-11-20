@@ -13,7 +13,7 @@ declare	namespace clortho {
 		}
 
 		interface ClorthoForService {
-			getFromKeyChain(username: string): Promise<Credentials>;
+			getFromKeychain(username: string): Promise<Credentials>;
 
 			prompt(username: string, message?: string, cli?: boolean): Promise<Credentials>;
 
