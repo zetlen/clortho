@@ -3,6 +3,7 @@
   "version": "1.2.2",
   "description": "friendly, OS-appropriate password handling for node scripts",
   "main": "lib/index.js",
+  "types:"index.d.ts",
   "scripts": {
     "babel": "babel src -d lib",
     "lint": "semistandard **/*.js",
