@@ -2,7 +2,7 @@
 const inquirer = require('inquirer');
 
 module.exports = (service, username, message) =>
-  new Promise((y, n) => {
+  new Promise((resolve, reject) => {
     process.stdout.write('\u0007\n'); // ding!
     console.log(
       message || `Please enter your credentials for ${service}.`
@@ -27,7 +27,7 @@ module.exports = (service, username, message) =>
     try {
       inquirer.prompt(prompts, a => {
         a.username = a.username || username;
-        y(a);
+        resolve(a);
       });
-    } catch (e) { n(e); }
+    } catch (e) { reject(e); }
   });

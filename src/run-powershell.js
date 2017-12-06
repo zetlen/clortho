@@ -1,13 +1,14 @@
 'use strict';
 const childProcess = require('child_process');
-module.exports = (s, isFile) => new Promise((y, n) =>
-  childProcess.exec(
+module.exports = (s, isFile) => new Promise((resolve, reject) => {
+  let child = childProcess.exec(
     'powershell -' + (isFile ? 'File' : 'Command') + ' ' + s,
-    { stdio: 'ignore' },
+    {stdio: 'ignore'},
     (e, stdout, stderr) => {
-      if (e) return n(e);
-      if (stderr) return n(new Error(stderr));
-      y(stdout.trim());
+      if (e) return reject(e);
+      if (stderr) return reject(new Error(stderr));
+      resolve(stdout.trim());
     }
-  )
-);
+  );
+  child.stdin.end();
+});

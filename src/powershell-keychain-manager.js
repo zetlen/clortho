@@ -7,7 +7,7 @@ const runCredMan = (cmd, opts) =>
   runPowershell(
     Object.keys(opts).reduce(
       (cmd, k) => cmd + ` -${k} '${jsStringEscape(opts[k])}'`,
-      `${credManPath} -${cmd}`
+      `"${credManPath}" -${cmd}`
     ),
     true
   );
