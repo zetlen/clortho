@@ -6,7 +6,7 @@ const credManPath = path.resolve(__dirname, '../CredMan.ps1');
 const runCredMan = (cmd, opts) =>
   runPowershell(
     Object.keys(opts).reduce(
-      (cmd, k) => cmd + ` -${k} '${jsStringEscape(opts[k])}'`,
+      (cmd, k) => cmd + ` -${k} "${jsStringEscape(opts[k])}"`,
       `${credManPath} -${cmd}`
     ),
     true
