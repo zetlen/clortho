@@ -29,7 +29,7 @@ const methods = [
 ];
 tape('forService returns an object with methods', assert => {
   assert.plan(methods.length);
-  let vinz = clortho.forService('Gozer');
+  const vinz = clortho.forService('Gozer');
   methods.forEach(method =>
     assert.equal(
       'function',
