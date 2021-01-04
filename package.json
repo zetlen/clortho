@@ -6,6 +6,7 @@
   "scripts": {
     "babel": "babel src -d lib",
     "lint": "semistandard **/*.js",
+    "lint-fix": "semistandard --fix **/*.js",
     "tape": "tape ./test/**/*.js",
     "test": "npm run lint && npm run babel && npm run tape",
     "preversion": "npm run test",
