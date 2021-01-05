@@ -11,7 +11,7 @@ const runCredMan = (cmd, opts) =>
     ),
     true
   );
-const passwordLineRE = /^[\s\t]*Password[\s\t]*:[\s\t]?'(.*)'/;
+const passwordLineRE = /^[\s\t]*Password[\s\t]*:[\s\t]?('|")?(.*)\1/;
 const createTargetName = (service, account) => `${service};user=${account}`;
 
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
         `Unknown error finding ${service} password for ${account}.`
       );
     }
-    return { username: account, password: pwl.match(passwordLineRE)[1] };
+    return { username: account, password: pwl.match(passwordLineRE)[2] };
   }),
   set: (service, account, password) => runCredMan(
     'AddCred',
