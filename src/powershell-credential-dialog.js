@@ -7,13 +7,13 @@ module.exports = (service, username, message) => {
   return runPowershell(
     `$c = Get-Credential -Message \\"${message}\\" -Username ${username}; ` +
     `$c.GetNetworkCredential().username; echo \\"${delimiter}\\"; ` +
-    `$c.GetNetworkCredential().password;`
+    '$c.GetNetworkCredential().password;'
   )
-  .then(r => {
-    let answers = r.split(delimiter).map(s => s.trim());
-    return {
-      username: answers[0],
-      password: answers[1]
-    };
-  });
+    .then(r => {
+      const answers = r.split(delimiter).map(s => s.trim());
+      return {
+        username: answers[0],
+        password: answers[1]
+      };
+    });
 };

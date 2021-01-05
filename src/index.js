@@ -2,14 +2,15 @@
 const {
   isOSX,
   isWindows,
-  hasPowershell } = require('./os-features');
+  hasPowershell
+} = require('./os-features');
 const psDialog = require('./powershell-credential-dialog');
 const osaDialog = require('./osascript-credential-dialog');
 const cliPrompt = require('./cli-credential-prompt');
 const keychain = require('./keychain-access');
 const ErrorManager = require('./error-manager');
 
-let clortho = (opts) =>
+const clortho = (opts) =>
   Promise.resolve().then(() => {
     if (!opts) {
       throw ErrorManager.create(
@@ -17,18 +18,18 @@ let clortho = (opts) =>
         'No configuration object supplied.'
       );
     }
-    let {service, username, message, cli, refresh} = opts;
-    let vinz = clortho.forService(service);
+    const { service, username, message, cli, refresh } = opts;
+    const vinz = clortho.forService(service);
     if (refresh || !username) {
       return vinz.prompt(username, message, cli).then(vinz.trySaveToKeychain);
     }
     return vinz.getFromKeychain(username)
-    .catch(() =>
-      vinz.prompt(username, message, cli).then(vinz.trySaveToKeychain)
-    );
+      .catch(() =>
+        vinz.prompt(username, message, cli).then(vinz.trySaveToKeychain)
+      );
   });
 
-let getOsPrompt = (username, message, cli) => {
+const getOsPrompt = (username, message, cli) => {
   if (isOSX && username) return osaDialog;
   if (isWindows && hasPowershell) return psDialog;
   if (cli !== false) return cliPrompt;
@@ -74,10 +75,10 @@ clortho.forService = service => {
     },
     trySaveToKeychain (credential) {
       return keychain.set(service, credential.username, credential.password)
-      .then(
-        () => credential,
-        () => credential
-      );
+        .then(
+          () => credential,
+          () => credential
+        );
     },
     removeFromKeychain (username) {
       return keychain.remove(service, username);

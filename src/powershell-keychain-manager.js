@@ -27,7 +27,7 @@ module.exports = {
         `Could not find ${service} password for ${account}`
       );
     }
-    let pwl = res.split('\n').find(l => !!l.match(passwordLineRE));
+    const pwl = res.split('\n').find(l => !!l.match(passwordLineRE));
     if (!pwl) {
       throw ErrorManager.create(
         'GET_FAILURE',
