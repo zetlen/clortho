@@ -6,12 +6,12 @@ const credManPath = path.resolve(__dirname, '../CredMan.ps1');
 const runCredMan = (cmd, opts) =>
   runPowershell(
     Object.keys(opts).reduce(
-      (cmd, k) => cmd + ` -${k} '${jsStringEscape(opts[k])}'`,
+      (cmd, k) => cmd + ` -${k} "${jsStringEscape(opts[k])}"`,
       `${credManPath} -${cmd}`
     ),
     true
   );
-const passwordLineRE = /^[\s\t]*Password[\s\t]*:[\s\t]?'(.*)'/;
+const passwordLineRE = /^[\s\t]*Password[\s\t]*:[\s\t]?('|")?(.*)\1/;
 const createTargetName = (service, account) => `${service};user=${account}`;
 
 module.exports = {
@@ -27,14 +27,14 @@ module.exports = {
         `Could not find ${service} password for ${account}`
       );
     }
-    let pwl = res.split('\n').find(l => !!l.match(passwordLineRE));
+    const pwl = res.split('\n').find(l => !!l.match(passwordLineRE));
     if (!pwl) {
       throw ErrorManager.create(
         'GET_FAILURE',
         `Unknown error finding ${service} password for ${account}.`
       );
     }
-    return { username: account, password: pwl.match(passwordLineRE)[1] };
+    return { username: account, password: pwl.match(passwordLineRE)[2] };
   }),
   set: (service, account, password) => runCredMan(
     'AddCred',

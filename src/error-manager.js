@@ -5,7 +5,7 @@ module.exports = {
     return new Error(`clortho: ${code}: ${message}`);
   },
   getCode (err) {
-    let m = err.message.match(codeRe);
+    const m = err.message.match(codeRe);
     return m && m[1];
   }
 };

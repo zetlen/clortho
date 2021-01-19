@@ -2,43 +2,43 @@ const keychain = require('keychain');
 const ErrorManager = require('./error-manager');
 
 module.exports = {
-  get: (service, account) => new Promise((y, n) => {
+  get: (service, account) => new Promise((resolve, reject) => {
     keychain.getPassword({ service, account }, (err, password) => {
       if (err) {
-        return n(
+        return reject(
           ErrorManager.create(
             'GET_FAILURE',
             err.message
           )
         );
       }
-      return y({ username: account, password });
+      return resolve({ username: account, password });
     });
   }),
-  set: (service, account, password) => new Promise((y, n) => {
+  set: (service, account, password) => new Promise((resolve, reject) => {
     keychain.setPassword({ service, account, password }, err => {
       if (err) {
-        return n(
+        return reject(
           ErrorManager.create(
             'KEYCHAIN_FAILURE',
             err.message
           )
         );
       }
-      return y({ username: account, password });
+      return resolve({ username: account, password });
     });
   }),
-  remove: (service, account) => new Promise((y, n) => {
+  remove: (service, account) => new Promise((resolve, reject) => {
     keychain.deletePassword({ service, account }, err => {
       if (err) {
-        return n(
+        return reject(
           ErrorManager.create(
             'KEYCHAIN_FAILURE',
             err.message
           )
         );
       }
-      return y();
+      return resolve();
     });
   })
 };
