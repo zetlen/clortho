@@ -1,5 +1,5 @@
 const ErrorManager = require('./error-manager');
-let cache = {};
+const cache = {};
 module.exports = {
   get (service, username) {
     if (cache[service] && cache[service][username]) {
