@@ -1,0 +1,33 @@
+[package]
+name = "clortho"
+description = "A pinentry and askpass broker: one queue, one keymaster, any number of terminals"
+version.workspace = true
+edition = "2024"
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "clortho"
+path = "src/bin/clortho.rs"
+
+[[bin]]
+name = "pinentry-clortho"
+path = "src/bin/pinentry-clortho.rs"
+
+[[bin]]
+name = "clortho-askpass"
+path = "src/bin/clortho-askpass.rs"
+
+[dependencies]
+clortho-core = { version = "2.0.0-alpha.1", path = "../clortho-core" }
+dirs = "6"
+keyring = "4.2"
+ratatui = "0.30"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+sysinfo = { version = "0.40", default-features = false, features = ["system"] }
+toml = "1"
+zeroize = "1"
+
+[target."cfg(unix)".dependencies]
+libc = "0.2"
