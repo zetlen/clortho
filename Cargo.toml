@@ -1,0 +1,13 @@
+[workspace]
+resolver = "2"
+members = ["crates/clortho-core", "crates/clortho"]
+
+[workspace.package]
+version = "2.0.0-alpha.1"
+edition = "2021"
+license = "ISC"
+repository = "https://github.com/zetlen/clortho"
+
+[profile.release]
+lto = "thin"
+strip = true
